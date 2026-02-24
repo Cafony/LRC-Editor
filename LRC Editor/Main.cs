@@ -192,7 +192,7 @@ namespace LRC_Editor
                 richTextBox1.SelectionStart = richTextBox1.Text.Length;
             }
 
-            richTextBox1.ScrollToCaret();
+            //richTextBox1.ScrollToCaret();
         }
                 
         #endregion
@@ -244,9 +244,13 @@ namespace LRC_Editor
             About aboutForm = new About();
             aboutForm.ShowDialog();
         }
+        private void clearTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+        }
+
 
         #endregion
-
 
     }
 }

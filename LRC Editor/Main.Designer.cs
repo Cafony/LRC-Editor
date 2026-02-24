@@ -52,6 +52,8 @@
             this.f4ForwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.f5UndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fRedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +62,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -235,6 +238,21 @@
             this.fRedoToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.fRedoToolStripMenuItem.Text = "F6 - Redo";
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearTextToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // clearTextToolStripMenuItem
+            // 
+            this.clearTextToolStripMenuItem.Name = "clearTextToolStripMenuItem";
+            this.clearTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearTextToolStripMenuItem.Text = "Clear Text";
+            this.clearTextToolStripMenuItem.Click += new System.EventHandler(this.clearTextToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -288,6 +306,8 @@
         private System.Windows.Forms.ToolStripMenuItem f4ForwardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem f5UndoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fRedoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearTextToolStripMenuItem;
     }
 }
 
