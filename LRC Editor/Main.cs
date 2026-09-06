@@ -15,11 +15,13 @@ namespace LRC_Editor
 {
     public partial class Main : Form
     {
-        private Mp3Player player = new Mp3Player();
-        private string loadedFile = null;
+        private Mp3Player _player = new Mp3Player();
+        private string loadedMp3File = null;
         private Timer playbackTimer = new Timer();
         private bool isDragging = false;
         private UndoManager _undoManager;
+        private bool isPaused = false;
+        private string _waveFile;
 
         public Main()
         {
@@ -36,20 +38,20 @@ namespace LRC_Editor
 
         private void PlaybackTimer_Tick(object sender, EventArgs e)
         {
-            if (player.IsPlaying && !isDragging)
+            if (_player.IsPlaying && !isDragging)
             {
-                int currentSeconds = (int)player.CurrentTime.TotalSeconds;
+                int currentSeconds = (int)_player.CurrentTime.TotalSeconds;
 
                 if (currentSeconds <= trackBar1.Maximum)
                     trackBar1.Value = currentSeconds;
-                labelTime.Text = player.CurrentTime.ToString(@"mm\:ss") + " / " + player.TotalTime.ToString(@"mm\:ss");
+                labelTime.Text = _player.CurrentTime.ToString(@"mm\:ss") + " / " + _player.TotalTime.ToString(@"mm\:ss");
             }
         }
 
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            player.Stop();            
+            _player.Stop();            
         }
 
         private void trackBar1_MouseDown(object sender, MouseEventArgs e)
@@ -59,7 +61,7 @@ namespace LRC_Editor
 
         private void trackBar1_MouseUp(object sender, MouseEventArgs e)
         {
-            player.CurrentTime = TimeSpan.FromSeconds(trackBar1.Value);
+            _player.CurrentTime = TimeSpan.FromSeconds(trackBar1.Value);
             isDragging = false;
         }
 
@@ -73,37 +75,103 @@ namespace LRC_Editor
             return $"{minutes:00}:{seconds:00}.{centiseconds:00}";
         }
 
-        private void buttonPlay_Click(object sender, EventArgs e)
-        {            
-            if (string.IsNullOrEmpty(loadedFile))
-            
-                    return;
-
-            player.Play(loadedFile);
-
-            trackBar1.Minimum = 0;
-            trackBar1.Maximum = (int)player.TotalTime.TotalSeconds;
-            trackBar1.Value = 0;
-            labelTime.Text = "00:00 / " + player.TotalTime.ToString(@"mm\:ss");
-            playbackTimer.Start();
-        }
-        private void buttonStop_Click(object sender, EventArgs e)
+        private void PlayMusic()
         {
-            player.Stop();
+            if (_player.IsPlaying)
+            {
+                // Currently playing → pause
+                _player.Pause();
+                isPaused = true;
+                playbackTimer.Stop();
+                buttonPlay.Text = "Pause F8";
+                buttonPlay.BackColor = Color.White;
+
+            }
+            else if (isPaused)
+            {
+                // Currently paused → resume
+                _player.Resume();
+                isPaused = false;
+                playbackTimer.Start();
+                buttonPlay.Text = "Play F8";
+                buttonPlay.BackColor = Color.Green;
+
+            }
+            else
+            {
+                // Nothing playing → start the MP3
+                _player.Play(loadedMp3File);
+                isPaused = false;
+
+                trackBar1.Minimum = 0;
+                trackBar1.Maximum = (int)_player.TotalTime.TotalSeconds;
+                trackBar1.Value = 0;
+
+                labelTime.Text = "00:00 / " +
+                    _player.TotalTime.ToString(@"mm\:ss");
+
+                playbackTimer.Start();
+                buttonPlay.BackColor = Color.Green;
+
+            }
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(loadedMp3File))
+            {
+                MessageBox.Show("No mp3 file loaded");
+                return;
+            }
+
+            PlayMusic();
+
+        }
+
+        private void StopMusic()
+        {
+            _player.Stop();
             // reset trackbar and time label
             trackBar1.Value = 0;
             labelTime.Text = "00:00 / 00:00";
             playbackTimer.Stop();
-
+            buttonPlay.UseVisualStyleBackColor = true;
+            isPaused = false;
         }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            StopMusic();
+        }
+
+        public void PlayForward()
+        {
+            _player.Forward(TimeSpan.FromSeconds(2));
+            int currentSeconds = (int)_player.CurrentTime.TotalSeconds;
+
+            if (currentSeconds <= trackBar1.Maximum)
+                trackBar1.Value = currentSeconds;
+            labelTime.Text = _player.CurrentTime.ToString(@"mm\:ss") + " / " + _player.TotalTime.ToString(@"mm\:ss");
+        }
+
+        public void PlayBackward()
+        {
+            _player.Rewind(TimeSpan.FromSeconds(2));
+            int currentSeconds = (int)_player.CurrentTime.TotalSeconds;
+
+            if (currentSeconds <= trackBar1.Maximum)
+                trackBar1.Value = currentSeconds;
+            labelTime.Text = _player.CurrentTime.ToString(@"mm\:ss") + " / " + _player.TotalTime.ToString(@"mm\:ss");
+        }
+
         private void buttonRewind_Click(object sender, EventArgs e)
         {
-            player.Rewind(TimeSpan.FromSeconds(2));
+            PlayBackward();
         }
 
         private void buttonForward_Click(object sender, EventArgs e)
         {
-            player.Forward(TimeSpan.FromSeconds(2));
+            PlayForward();
         }
 
         #endregion
@@ -117,32 +185,43 @@ namespace LRC_Editor
                 //e.Handled = true;
                 //e.SuppressKeyPress = true;
             }
-
             if(e.KeyCode == Keys.F3)
-            {
-                player.Rewind(TimeSpan.FromSeconds(2));
-            }
-
-            if(e.KeyCode == Keys.F4)
-            {
-                player.Forward(TimeSpan.FromSeconds(2));
-            }
-
-            if(e.KeyCode == Keys.F5)
             {
                 _undoManager.Undo();
             }
 
-            if(e.KeyCode == Keys.F6)
+            if(e.KeyCode == Keys.F4)
             {
                 _undoManager.Redo();
             }
+
+
+            if(e.KeyCode == Keys.F6)
+            {
+                PlayBackward();
+            }
+            if(e.KeyCode == Keys.F7)
+            {
+                PlayForward();
+            }
+
+
+            if(e.KeyCode == Keys.F8)
+            {
+                PlayMusic();
+            }
+
+            if (e.KeyCode == Keys.F9)
+            {
+                StopMusic();
+            }
+
         }
 
         private void InsertTimestamp()
         {
             
-            if (!player.IsPlaying)
+            if (!_player.IsPlaying)
                 return;
 
             if(richTextBox1.Lines.Length == 0)
@@ -151,7 +230,7 @@ namespace LRC_Editor
                 richTextBox1.Text = " ";                
             }
             // Format time as [mm:ss.ff] for LRC
-            string timestamp = $"[{player.CurrentTime.Minutes:D2}:{player.CurrentTime.Seconds:D2}.{player.CurrentTime.Milliseconds / 10:D2}]";
+            string timestamp = $"[{_player.CurrentTime.Minutes:D2}:{_player.CurrentTime.Seconds:D2}.{_player.CurrentTime.Milliseconds / 10:D2}]";
 
             // Get current line index from caret position
             int caretIndex = richTextBox1.SelectionStart;
@@ -206,19 +285,26 @@ namespace LRC_Editor
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                loadedFile = ofd.FileName;
+                loadedMp3File = ofd.FileName;
 
             }
+
+            _waveFile = Path.Combine(
+            Path.GetTempPath(),
+            Guid.NewGuid().ToString() + ".wav");
+
         }
         private void loadLyricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Text Files (*.txt)|*.txt|Lyrics (*.lrc)|*.lrc|All Files (*.*)|*.*";
+                // open txt files and lrc files
+                openFileDialog.Filter = "Lyrics Files (*.lrc;*.txt)|*.lrc;*.txt|All Files (*.*)|*.*";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = openFileDialog.FileName;
+                    //string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
                     string fileContent = File.ReadAllText(filePath);
 
                     richTextBox1.Text = fileContent; // show the text, not the path
@@ -234,7 +320,8 @@ namespace LRC_Editor
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    System.IO.File.WriteAllText(sfd.FileName, richTextBox1.Text);
+                    System.IO.File.WriteAllText(sfd.FileName, richTextBox1.Text, Encoding.GetEncoding(1252));
+                    //System.IO.File.WriteAllText(sfd.FileName, richTextBox1.Text);
                     MessageBox.Show("File saved successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -252,5 +339,109 @@ namespace LRC_Editor
 
         #endregion
 
+        private void deleteAllSyncronizationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Check if RichTextBox is empty
+            if (string.IsNullOrWhiteSpace(richTextBox1.Text))
+                return;
+
+            string[] lines = richTextBox1.Lines;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                int index = lines[i].IndexOf(']');
+
+                if (index >= 0)
+                {
+                    // Remove everything before and including ']'
+                    lines[i] = lines[i].Substring(index + 1);
+                }
+            }
+
+            richTextBox1.Lines = lines;
+        }
+
+        private void f8PauseMusicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _player.Pause();
+        }
+
+        private void buttonPause_Click(object sender, EventArgs e)
+        {
+            _player.Pause();
+        }
+
+
+
+        #region Convert Audio to Text
+        private void extractLyricsFromMusicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+                try
+                {
+                    // THIS CALLS THE METHOD
+                    ConvertMp3ToWav(
+                        loadedMp3File,
+                        _waveFile);
+
+                string modelPath = @"C:\Users\tozec\source\repos\LRC Editor\LRC Editor\bin\Debug\vosk-model-small-pt-0.3";
+
+
+                SpeechToText speech =
+                        new SpeechToText(modelPath);
+
+                    string text =
+                        speech.Convert(_waveFile);
+
+                    richTextBox1.Text = text;
+
+                    speech.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        ex.Message,
+                        "Speech to Text",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (File.Exists(_waveFile))
+                    {
+                        File.Delete(_waveFile);
+                    }
+                }
+        }
+            
+        
+
+        private void ConvertMp3ToWav(string mp3File,string wavFile)
+        {
+            using (var reader =
+                   new NAudio.Wave.MediaFoundationReader(mp3File))
+            {
+                var targetFormat =
+                    new NAudio.Wave.WaveFormat(
+                        16000,
+                        16,
+                        1);
+
+                using (var resampler =
+                       new NAudio.Wave.MediaFoundationResampler(
+                           reader,
+                           targetFormat))
+                {
+                    resampler.ResamplerQuality = 60;
+
+                    NAudio.Wave.WaveFileWriter.CreateWaveFile(
+                        wavFile,
+                        resampler);
+                }
+            }
+        }
+
+        #endregion
     }
+
 }

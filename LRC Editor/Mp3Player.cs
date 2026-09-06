@@ -16,12 +16,14 @@ namespace LRC_Editor
 
         public void Play(string filePath)
         {
+
             Stop();
 
             audioFile = new AudioFileReader(filePath);
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
             outputDevice.Play();
+
         }
 
         public void Pause()
