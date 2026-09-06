@@ -39,6 +39,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllSyncronizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractLyricsFromMusicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.f2SyncInsertTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.f6RewindToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +57,6 @@
             this.buttonRewind = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.extractLyricsFromMusicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
@@ -88,26 +88,26 @@
             // loadMusicToolStripMenuItem1
             // 
             this.loadMusicToolStripMenuItem1.Name = "loadMusicToolStripMenuItem1";
-            this.loadMusicToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.loadMusicToolStripMenuItem1.Size = new System.Drawing.Size(135, 22);
             this.loadMusicToolStripMenuItem1.Text = "Load Music";
             this.loadMusicToolStripMenuItem1.Click += new System.EventHandler(this.loadMusicToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
             // 
             // loadLyricsToolStripMenuItem
             // 
             this.loadLyricsToolStripMenuItem.Name = "loadLyricsToolStripMenuItem";
-            this.loadLyricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadLyricsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.loadLyricsToolStripMenuItem.Text = "Load Lyrics";
             this.loadLyricsToolStripMenuItem.Click += new System.EventHandler(this.loadLyricsToolStripMenuItem_Click);
             // 
             // saveLyricsToolStripMenuItem
             // 
             this.saveLyricsToolStripMenuItem.Name = "saveLyricsToolStripMenuItem";
-            this.saveLyricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveLyricsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.saveLyricsToolStripMenuItem.Text = "Save Lyrics";
             this.saveLyricsToolStripMenuItem.Click += new System.EventHandler(this.saveLyricsToolStripMenuItem_Click);
             // 
@@ -134,6 +134,13 @@
             this.deleteAllSyncronizationToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.deleteAllSyncronizationToolStripMenuItem.Text = "Delete All Syncronization";
             this.deleteAllSyncronizationToolStripMenuItem.Click += new System.EventHandler(this.deleteAllSyncronizationToolStripMenuItem_Click);
+            // 
+            // extractLyricsFromMusicToolStripMenuItem
+            // 
+            this.extractLyricsFromMusicToolStripMenuItem.Name = "extractLyricsFromMusicToolStripMenuItem";
+            this.extractLyricsFromMusicToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.extractLyricsFromMusicToolStripMenuItem.Text = "Extract Lyrics from Music";
+            this.extractLyricsFromMusicToolStripMenuItem.Click += new System.EventHandler(this.extractLyricsFromMusicToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -195,12 +202,13 @@
             // buttonPlay
             // 
             this.buttonPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonPlay.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.buttonPlay.Location = new System.Drawing.Point(127, 479);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(90, 23);
             this.buttonPlay.TabIndex = 2;
             this.buttonPlay.Text = "Play F8";
-            this.buttonPlay.UseVisualStyleBackColor = true;
+            this.buttonPlay.UseVisualStyleBackColor = false;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
             // trackBar1
@@ -273,13 +281,6 @@
             this.toolTip1.SetToolTip(this.buttonForward, "Forward F4");
             this.buttonForward.UseVisualStyleBackColor = true;
             this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
-            // 
-            // extractLyricsFromMusicToolStripMenuItem
-            // 
-            this.extractLyricsFromMusicToolStripMenuItem.Name = "extractLyricsFromMusicToolStripMenuItem";
-            this.extractLyricsFromMusicToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.extractLyricsFromMusicToolStripMenuItem.Text = "Extract Lyrics from Music";
-            this.extractLyricsFromMusicToolStripMenuItem.Click += new System.EventHandler(this.extractLyricsFromMusicToolStripMenuItem_Click);
             // 
             // Main
             // 
