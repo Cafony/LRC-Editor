@@ -5,21 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
 
+
+
 namespace LRC_Editor
 {
     internal class Mp3Player
     {
         private IWavePlayer outputDevice;
         private AudioFileReader audioFile;
+        private float playbackspeed = 1.0f;
 
         public bool IsPlaying => outputDevice?.PlaybackState == PlaybackState.Playing;
+
 
         public void Play(string filePath)
         {
 
             Stop();
 
-            audioFile = new AudioFileReader(filePath);
+            audioFile = new AudioFileReader(filePath);            
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
             outputDevice.Play();

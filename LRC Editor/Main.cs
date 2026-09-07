@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Lyrics_Editor;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,8 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lyrics_Editor;
-using NAudio.Wave;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LRC_Editor
 {
@@ -22,6 +23,7 @@ namespace LRC_Editor
         private UndoManager _undoManager;
         private bool isPaused = false;
         private string _waveFile;
+        
 
         public Main()
         {
@@ -51,7 +53,7 @@ namespace LRC_Editor
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _player.Stop();            
+            _player.Stop();
         }
 
         private void trackBar1_MouseDown(object sender, MouseEventArgs e)
@@ -137,6 +139,8 @@ namespace LRC_Editor
             playbackTimer.Stop();
             buttonPlay.UseVisualStyleBackColor = true;
             isPaused = false;
+            _player.Rewind(TimeSpan.FromSeconds(0));
+
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
@@ -185,28 +189,28 @@ namespace LRC_Editor
                 //e.Handled = true;
                 //e.SuppressKeyPress = true;
             }
-            if(e.KeyCode == Keys.F3)
+            if (e.KeyCode == Keys.F3)
             {
                 _undoManager.Undo();
             }
 
-            if(e.KeyCode == Keys.F4)
+            if (e.KeyCode == Keys.F4)
             {
                 _undoManager.Redo();
             }
 
 
-            if(e.KeyCode == Keys.F6)
+            if (e.KeyCode == Keys.F6)
             {
                 PlayBackward();
             }
-            if(e.KeyCode == Keys.F7)
+            if (e.KeyCode == Keys.F7)
             {
                 PlayForward();
             }
 
 
-            if(e.KeyCode == Keys.F8)
+            if (e.KeyCode == Keys.F8)
             {
                 PlayMusic();
             }
@@ -220,14 +224,14 @@ namespace LRC_Editor
 
         private void InsertTimestamp()
         {
-            
+
             if (!_player.IsPlaying)
                 return;
 
-            if(richTextBox1.Lines.Length == 0)
+            if (richTextBox1.Lines.Length == 0)
             {
                 // If no lines, just insert timestamp at the end to prevent error on insert stamp at line 0
-                richTextBox1.Text = " ";                
+                richTextBox1.Text = " ";
             }
             // Format time as [mm:ss.ff] for LRC
             string timestamp = $"[{_player.CurrentTime.Minutes:D2}:{_player.CurrentTime.Seconds:D2}.{_player.CurrentTime.Milliseconds / 10:D2}]";
@@ -273,7 +277,7 @@ namespace LRC_Editor
 
             //richTextBox1.ScrollToCaret();
         }
-                
+
         #endregion
 
         #region MENU TOP
@@ -304,8 +308,8 @@ namespace LRC_Editor
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = openFileDialog.FileName;
-                    //string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
-                    string fileContent = File.ReadAllText(filePath);
+                    string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
+                    //string fileContent = File.ReadAllText(filePath);
 
                     richTextBox1.Text = fileContent; // show the text, not the path
                 }
@@ -376,13 +380,13 @@ namespace LRC_Editor
         #region Convert Audio to Text
         private void extractLyricsFromMusicToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
-                try
-                {
-                    // THIS CALLS THE METHOD
-                    ConvertMp3ToWav(
-                        loadedMp3File,
-                        _waveFile);
+
+            try
+            {
+                // THIS CALLS THE METHOD
+                ConvertMp3ToWav(
+                    loadedMp3File,
+                    _waveFile);
 
                 string modelPath = @"C:\Users\tozec\source\repos\LRC Editor\LRC Editor\bin\Debug\vosk-model-small-pt-0.3";
 
@@ -390,33 +394,33 @@ namespace LRC_Editor
                 SpeechToText speech =
                         new SpeechToText(modelPath);
 
-                    string text =
-                        speech.Convert(_waveFile);
+                string text =
+                    speech.Convert(_waveFile);
 
-                    richTextBox1.Text = text;
+                richTextBox1.Text = text;
 
-                    speech.Dispose();
-                }
-                catch (Exception ex)
+                speech.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Speech to Text",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (File.Exists(_waveFile))
                 {
-                    MessageBox.Show(
-                        ex.Message,
-                        "Speech to Text",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    File.Delete(_waveFile);
                 }
-                finally
-                {
-                    if (File.Exists(_waveFile))
-                    {
-                        File.Delete(_waveFile);
-                    }
-                }
+            }
         }
-            
-        
 
-        private void ConvertMp3ToWav(string mp3File,string wavFile)
+
+
+        private void ConvertMp3ToWav(string mp3File, string wavFile)
         {
             using (var reader =
                    new NAudio.Wave.MediaFoundationReader(mp3File))
@@ -442,6 +446,73 @@ namespace LRC_Editor
         }
 
         #endregion
-    }
 
+        private void caseSentenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Case sentence UP to each line
+            if (string.IsNullOrWhiteSpace(richTextBox1.Text))
+                return;
+
+            string[] lines = richTextBox1.Lines;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                //trim lines
+
+
+                if (!string.IsNullOrWhiteSpace(lines[i]))
+                {
+                    //trim lines
+                    lines[i] = lines[i].Trim();
+                    // Find the first character of the line
+                    lines[i] = char.ToUpper(lines[i][0]) + lines[i].Substring(1);
+                }
+
+            }
+
+            richTextBox1.Lines = lines;
+
+        }
+
+        private void loadTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // open txt files and lrc files
+                openFileDialog.Filter = "Text Files (*.txt)|*.txt";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
+                    //string fileContent = File.ReadAllText(filePath);
+
+                    richTextBox1.Text = fileContent; // show the text, not the path
+                }
+            }
+        }
+
+        private void formatSpacesToOneToolStripMenuItem_Click(object sender, EventArgs e)
+        {            
+            // make spaces eqaul to one space
+            if (string.IsNullOrEmpty(richTextBox1.Text)) return;
+
+            richTextBox1.Text =
+                System.Text.RegularExpressions.Regex.Replace(
+                    richTextBox1.Text,
+                    @" +",
+                    " ");
+        }
+
+
+        private void buttonUndo_Click(object sender, EventArgs e)
+        {
+            _undoManager.Undo();
+        }
+
+        private void buttonRedo_Click(object sender, EventArgs e)
+        {
+            _undoManager.Redo();
+        }
+    }
 }

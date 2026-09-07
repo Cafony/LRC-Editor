@@ -13,6 +13,7 @@ namespace LRC_Editor
         private Stack<string> _undoStack = new Stack<string>();
         private Stack<string> _redoStack = new Stack<string>();
         private bool _internalChange = false;
+        
 
         public UndoManager(RichTextBox richTextBox)
         {

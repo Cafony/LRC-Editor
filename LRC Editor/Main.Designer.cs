@@ -40,6 +40,7 @@
             this.clearTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllSyncronizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractLyricsFromMusicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.caseSentenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.f2SyncInsertTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.f6RewindToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +58,10 @@
             this.buttonRewind = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.loadTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.formatSpacesToOneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonUndo = new System.Windows.Forms.Button();
+            this.buttonRedo = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
@@ -79,6 +84,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadMusicToolStripMenuItem1,
             this.toolStripSeparator1,
+            this.loadTextToolStripMenuItem,
             this.loadLyricsToolStripMenuItem,
             this.saveLyricsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -88,26 +94,26 @@
             // loadMusicToolStripMenuItem1
             // 
             this.loadMusicToolStripMenuItem1.Name = "loadMusicToolStripMenuItem1";
-            this.loadMusicToolStripMenuItem1.Size = new System.Drawing.Size(135, 22);
+            this.loadMusicToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.loadMusicToolStripMenuItem1.Text = "Load Music";
             this.loadMusicToolStripMenuItem1.Click += new System.EventHandler(this.loadMusicToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // loadLyricsToolStripMenuItem
             // 
             this.loadLyricsToolStripMenuItem.Name = "loadLyricsToolStripMenuItem";
-            this.loadLyricsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.loadLyricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadLyricsToolStripMenuItem.Text = "Load Lyrics";
             this.loadLyricsToolStripMenuItem.Click += new System.EventHandler(this.loadLyricsToolStripMenuItem_Click);
             // 
             // saveLyricsToolStripMenuItem
             // 
             this.saveLyricsToolStripMenuItem.Name = "saveLyricsToolStripMenuItem";
-            this.saveLyricsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.saveLyricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveLyricsToolStripMenuItem.Text = "Save Lyrics";
             this.saveLyricsToolStripMenuItem.Click += new System.EventHandler(this.saveLyricsToolStripMenuItem_Click);
             // 
@@ -116,7 +122,9 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearTextToolStripMenuItem,
             this.deleteAllSyncronizationToolStripMenuItem,
-            this.extractLyricsFromMusicToolStripMenuItem});
+            this.extractLyricsFromMusicToolStripMenuItem,
+            this.caseSentenceToolStripMenuItem,
+            this.formatSpacesToOneToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -141,6 +149,13 @@
             this.extractLyricsFromMusicToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.extractLyricsFromMusicToolStripMenuItem.Text = "Extract Lyrics from Music";
             this.extractLyricsFromMusicToolStripMenuItem.Click += new System.EventHandler(this.extractLyricsFromMusicToolStripMenuItem_Click);
+            // 
+            // caseSentenceToolStripMenuItem
+            // 
+            this.caseSentenceToolStripMenuItem.Name = "caseSentenceToolStripMenuItem";
+            this.caseSentenceToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.caseSentenceToolStripMenuItem.Text = "Case Sentence";
+            this.caseSentenceToolStripMenuItem.Click += new System.EventHandler(this.caseSentenceToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -202,7 +217,7 @@
             // buttonPlay
             // 
             this.buttonPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonPlay.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.buttonPlay.BackColor = System.Drawing.SystemColors.ControlLight;
             this.buttonPlay.Location = new System.Drawing.Point(127, 479);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(90, 23);
@@ -252,9 +267,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(12, 27);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 56);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(695, 395);
+            this.richTextBox1.Size = new System.Drawing.Size(695, 366);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
             // 
@@ -282,11 +297,48 @@
             this.buttonForward.UseVisualStyleBackColor = true;
             this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
+            // loadTextToolStripMenuItem
+            // 
+            this.loadTextToolStripMenuItem.Name = "loadTextToolStripMenuItem";
+            this.loadTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadTextToolStripMenuItem.Text = "Load Text";
+            this.loadTextToolStripMenuItem.Click += new System.EventHandler(this.loadTextToolStripMenuItem_Click);
+            // 
+            // formatSpacesToOneToolStripMenuItem
+            // 
+            this.formatSpacesToOneToolStripMenuItem.Name = "formatSpacesToOneToolStripMenuItem";
+            this.formatSpacesToOneToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.formatSpacesToOneToolStripMenuItem.Text = "Format spaces to one";
+            this.formatSpacesToOneToolStripMenuItem.ToolTipText = "Make all spaces on text equal to one";
+            this.formatSpacesToOneToolStripMenuItem.Click += new System.EventHandler(this.formatSpacesToOneToolStripMenuItem_Click);
+            // 
+            // buttonUndo
+            // 
+            this.buttonUndo.Location = new System.Drawing.Point(617, 27);
+            this.buttonUndo.Name = "buttonUndo";
+            this.buttonUndo.Size = new System.Drawing.Size(41, 23);
+            this.buttonUndo.TabIndex = 9;
+            this.buttonUndo.Text = "Undo";
+            this.buttonUndo.UseVisualStyleBackColor = true;
+            this.buttonUndo.Click += new System.EventHandler(this.buttonUndo_Click);
+            // 
+            // buttonRedo
+            // 
+            this.buttonRedo.Location = new System.Drawing.Point(664, 27);
+            this.buttonRedo.Name = "buttonRedo";
+            this.buttonRedo.Size = new System.Drawing.Size(41, 23);
+            this.buttonRedo.TabIndex = 10;
+            this.buttonRedo.Text = "Redo";
+            this.buttonRedo.UseVisualStyleBackColor = true;
+            this.buttonRedo.Click += new System.EventHandler(this.buttonRedo_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(719, 514);
+            this.Controls.Add(this.buttonRedo);
+            this.Controls.Add(this.buttonUndo);
             this.Controls.Add(this.buttonForward);
             this.Controls.Add(this.buttonRewind);
             this.Controls.Add(this.richTextBox1);
@@ -340,6 +392,11 @@
         private System.Windows.Forms.ToolStripMenuItem deleteAllSyncronizationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem f8PauseMusicToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractLyricsFromMusicToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem caseSentenceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formatSpacesToOneToolStripMenuItem;
+        private System.Windows.Forms.Button buttonUndo;
+        private System.Windows.Forms.Button buttonRedo;
     }
 }
 
