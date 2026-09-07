@@ -75,6 +75,7 @@
             this.buttonEmail.TabIndex = 3;
             this.buttonEmail.Text = "Send me a email";
             this.buttonEmail.UseVisualStyleBackColor = true;
+            this.buttonEmail.Click += new System.EventHandler(this.buttonEmail_Click);
             // 
             // About
             // 

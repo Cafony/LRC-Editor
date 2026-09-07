@@ -13,7 +13,8 @@ namespace LRC_Editor
     {
         private IWavePlayer outputDevice;
         private AudioFileReader audioFile;
-        private float playbackspeed = 1.0f;
+        //private float playbackspeed = 1.0f;
+        private float volume = 1.0f;
 
         public bool IsPlaying => outputDevice?.PlaybackState == PlaybackState.Playing;
 
@@ -24,6 +25,7 @@ namespace LRC_Editor
             Stop();
 
             audioFile = new AudioFileReader(filePath);            
+            audioFile.Volume = volume;
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
             outputDevice.Play();
@@ -90,9 +92,11 @@ namespace LRC_Editor
 
         public float Volume
         {
-            get => audioFile?.Volume ?? 0f;
+            get => volume;
             set
             {
+                volume = value;
+
                 if (audioFile != null)
                     audioFile.Volume = value;
             }

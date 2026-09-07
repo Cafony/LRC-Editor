@@ -10,7 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
+using SoundTouch.Net;
+using SoundTouch;
+using System.Media;
 
 namespace LRC_Editor
 {
@@ -22,7 +24,9 @@ namespace LRC_Editor
         private bool isDragging = false;
         private UndoManager _undoManager;
         private bool isPaused = false;
-        private string _waveFile;
+        private float volume = 1.0f;
+        
+        private string _filenameMusic;
         
 
         public Main()
@@ -34,9 +38,120 @@ namespace LRC_Editor
             this.KeyPreview = true;
             // Mando o richtext para a class
             _undoManager = new UndoManager(richTextBox1);
-
+            //Inicialize volume trackbar
+            _player.Volume = volumeTrackbar.Value / 100f;
 
         }
+        #region MENU TOP
+
+
+
+
+        private void loadMusicToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "MP3 Files|*.mp3";
+            ofd.Multiselect = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                loadedMp3File = ofd.FileName;
+                // get filename from path
+                _filenameMusic = Path.GetFileName(loadedMp3File);
+
+
+            }
+
+            // write filename to lable
+            labelFilename.Text = "MP3 Filename: " + loadedMp3File;
+
+        }
+        private void loadLyricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // open txt files and lrc files
+                openFileDialog.Filter = "Lyrics Files (*.lrc;*.txt)|*.lrc;*.txt|All Files (*.*)|*.*";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
+                    //string fileContent = File.ReadAllText(filePath);
+
+                    richTextBox1.Text = fileContent; // show the text, not the path
+                }
+            }
+        }
+        private void saveLyricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Lyrics Files (*.lrc)|*.lrc|Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+                sfd.Title = "Save Lyrics";
+
+                // Set default filename BEFORE showing the dialog
+                if (!string.IsNullOrEmpty(_filenameMusic))
+                {
+                    sfd.FileName = Path.GetFileNameWithoutExtension(_filenameMusic) + ".lrc";
+                }
+                else
+                {
+                    sfd.FileName = "lyrics.lrc";
+                }
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(
+                        sfd.FileName,
+                        richTextBox1.Text,
+                        Encoding.GetEncoding(1252)
+                    );
+
+                    MessageBox.Show(
+                        "File saved successfully!",
+                        "Saved",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+            }
+        }
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About aboutForm = new About();
+            aboutForm.ShowDialog();
+        }
+        private void clearTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+        }
+
+        private void buttonClearText_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+        }
+
+        private void buttonCopyText_Click(object sender, EventArgs e)
+        {
+            // copy text from clipboard to richtextbox
+            if (!string.IsNullOrEmpty(richTextBox1.Text))
+            {
+                Clipboard.SetText(richTextBox1.Text);
+            }
+        }
+
+        private void buttonPasteText_Click(object sender, EventArgs e)
+        {
+            // paste text from richtextbox to clipboard
+            if (Clipboard.ContainsText())
+            {
+                richTextBox1.Text = Clipboard.GetText();
+            }
+            
+        }
+
+        #endregion
 
         private void PlaybackTimer_Tick(object sender, EventArgs e)
         {
@@ -49,7 +164,6 @@ namespace LRC_Editor
                 labelTime.Text = _player.CurrentTime.ToString(@"mm\:ss") + " / " + _player.TotalTime.ToString(@"mm\:ss");
             }
         }
-
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -68,17 +182,16 @@ namespace LRC_Editor
         }
 
         #region PLAY BUTTONS
-        private string FormatTime(TimeSpan time)
-        {
-            int minutes = (int)time.TotalMinutes;
-            int seconds = time.Seconds;
-            int centiseconds = time.Milliseconds / 10;
 
-            return $"{minutes:00}:{seconds:00}.{centiseconds:00}";
+
+        private void buttonSync_Click(object sender, EventArgs e)
+        {
+            InsertTimestamp();
         }
 
         private void PlayMusic()
         {
+
             if (_player.IsPlaying)
             {
                 // Currently playing → pause
@@ -86,7 +199,7 @@ namespace LRC_Editor
                 isPaused = true;
                 playbackTimer.Stop();
                 buttonPlay.Text = "Pause F8";
-                buttonPlay.BackColor = Color.White;
+                buttonPlay.BackColor = Color.MistyRose;
 
             }
             else if (isPaused)
@@ -96,7 +209,7 @@ namespace LRC_Editor
                 isPaused = false;
                 playbackTimer.Start();
                 buttonPlay.Text = "Play F8";
-                buttonPlay.BackColor = Color.Green;
+                buttonPlay.BackColor = Color.LightGreen;
 
             }
             else
@@ -113,7 +226,7 @@ namespace LRC_Editor
                     _player.TotalTime.ToString(@"mm\:ss");
 
                 playbackTimer.Start();
-                buttonPlay.BackColor = Color.Green;
+                buttonPlay.BackColor = Color.LightGreen;
 
             }
         }
@@ -280,68 +393,7 @@ namespace LRC_Editor
 
         #endregion
 
-        #region MENU TOP
-        private void loadMusicToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "MP3 Files|*.mp3";
-            ofd.Multiselect = true;
 
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                loadedMp3File = ofd.FileName;
-
-            }
-
-            _waveFile = Path.Combine(
-            Path.GetTempPath(),
-            Guid.NewGuid().ToString() + ".wav");
-
-        }
-        private void loadLyricsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                // open txt files and lrc files
-                openFileDialog.Filter = "Lyrics Files (*.lrc;*.txt)|*.lrc;*.txt|All Files (*.*)|*.*";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string filePath = openFileDialog.FileName;
-                    string fileContent = File.ReadAllText(filePath, Encoding.GetEncoding("iso-8859-1"));
-                    //string fileContent = File.ReadAllText(filePath);
-
-                    richTextBox1.Text = fileContent; // show the text, not the path
-                }
-            }
-        }
-        private void saveLyricsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "Lyrics Files (*.lrc)|*.lrc|Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-                sfd.Title = "Save Text File";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    System.IO.File.WriteAllText(sfd.FileName, richTextBox1.Text, Encoding.GetEncoding(1252));
-                    //System.IO.File.WriteAllText(sfd.FileName, richTextBox1.Text);
-                    MessageBox.Show("File saved successfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            About aboutForm = new About();
-            aboutForm.ShowDialog();
-        }
-        private void clearTextToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            richTextBox1.Clear();
-        }
-
-
-        #endregion
 
         private void deleteAllSyncronizationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -377,79 +429,9 @@ namespace LRC_Editor
 
 
 
-        #region Convert Audio to Text
-        private void extractLyricsFromMusicToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            try
-            {
-                // THIS CALLS THE METHOD
-                ConvertMp3ToWav(
-                    loadedMp3File,
-                    _waveFile);
-
-                string modelPath = @"C:\Users\tozec\source\repos\LRC Editor\LRC Editor\bin\Debug\vosk-model-small-pt-0.3";
-
-
-                SpeechToText speech =
-                        new SpeechToText(modelPath);
-
-                string text =
-                    speech.Convert(_waveFile);
-
-                richTextBox1.Text = text;
-
-                speech.Dispose();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Speech to Text",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (File.Exists(_waveFile))
-                {
-                    File.Delete(_waveFile);
-                }
-            }
-        }
-
-
-
-        private void ConvertMp3ToWav(string mp3File, string wavFile)
-        {
-            using (var reader =
-                   new NAudio.Wave.MediaFoundationReader(mp3File))
-            {
-                var targetFormat =
-                    new NAudio.Wave.WaveFormat(
-                        16000,
-                        16,
-                        1);
-
-                using (var resampler =
-                       new NAudio.Wave.MediaFoundationResampler(
-                           reader,
-                           targetFormat))
-                {
-                    resampler.ResamplerQuality = 60;
-
-                    NAudio.Wave.WaveFileWriter.CreateWaveFile(
-                        wavFile,
-                        resampler);
-                }
-            }
-        }
-
-        #endregion
 
         private void caseSentenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Case sentence UP to each line
             if (string.IsNullOrWhiteSpace(richTextBox1.Text))
                 return;
 
@@ -457,17 +439,27 @@ namespace LRC_Editor
 
             for (int i = 0; i < lines.Length; i++)
             {
-                //trim lines
+                lines[i] = lines[i].Trim();
 
+                if (string.IsNullOrWhiteSpace(lines[i]))
+                    continue;
 
-                if (!string.IsNullOrWhiteSpace(lines[i]))
+                int index = lines[i].IndexOf(']');
+
+                if (index >= 0 && index + 1 < lines[i].Length)
                 {
-                    //trim lines
-                    lines[i] = lines[i].Trim();
-                    // Find the first character of the line
+                    string before = lines[i].Substring(0, index + 1);
+                    string after = lines[i].Substring(index + 1).TrimStart();
+
+                    if (after.Length > 0)
+                        after = char.ToUpper(after[0]) + after.Substring(1);
+
+                    lines[i] = before + after;
+                }
+                else
+                {
                     lines[i] = char.ToUpper(lines[i][0]) + lines[i].Substring(1);
                 }
-
             }
 
             richTextBox1.Lines = lines;
@@ -497,6 +489,22 @@ namespace LRC_Editor
             // make spaces eqaul to one space
             if (string.IsNullOrEmpty(richTextBox1.Text)) return;
 
+            string[] lines = richTextBox1.Lines;
+            //if char after "]" is not space, add a space after "]"
+            foreach (string line in lines)
+            {
+                int index = line.IndexOf(']');
+                if (index >= 0 && index + 1 < line.Length)
+                {
+                    if (line[index + 1] != ' ')
+                    {
+                        richTextBox1.Text = richTextBox1.Text.Replace(line, line.Insert(index + 1, " "));
+                    }
+                }
+            }
+
+            richTextBox1.Text = richTextBox1.Text.Replace("]", "] ");
+
             richTextBox1.Text =
                 System.Text.RegularExpressions.Regex.Replace(
                     richTextBox1.Text,
@@ -514,5 +522,19 @@ namespace LRC_Editor
         {
             _undoManager.Redo();
         }
+
+
+
+        private void checkBoxSpeed_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void volumeTrackbar_Scroll(object sender, EventArgs e)
+        {
+            _player.Volume = volumeTrackbar.Value / 100f;
+        }
+
+
     }
 }

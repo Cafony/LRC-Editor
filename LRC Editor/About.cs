@@ -16,5 +16,14 @@ namespace Lyrics_Editor
         {
             InitializeComponent();
         }
+
+        private void buttonEmail_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "mailto:someone@example.com?subject=LRC%20Editor&body=Hello",
+                UseShellExecute = true
+            });
+        }
     }
 }
