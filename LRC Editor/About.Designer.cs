@@ -53,9 +53,9 @@
             this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTitle.Location = new System.Drawing.Point(179, 81);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(278, 31);
+            this.labelTitle.Size = new System.Drawing.Size(296, 31);
             this.labelTitle.TabIndex = 1;
-            this.labelTitle.Text = "Lyrics Subtile Maker";
+            this.labelTitle.Text = "Lyrics Karaoke Maker";
             // 
             // labelAntonyCode
             // 

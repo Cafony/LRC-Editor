@@ -21,7 +21,7 @@ namespace Lyrics_Editor
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName = "mailto:someone@example.com?subject=LRC%20Editor&body=Hello",
+                FileName = "mailto:tozecerdeira@gmail.com?subject=LRC%20Editor&body=Hello",
                 UseShellExecute = true
             });
         }

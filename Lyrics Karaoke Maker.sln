@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyrics Subtitle Maker", "LRC Editor\Lyrics Subtitle Maker.csproj", "{F961C234-DD44-4781-BCEE-50240F3A50EA}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Lyrics  Subtitle Installer", "Lyrics  Subtitle Installer\Lyrics  Subtitle Installer.vdproj", "{BA0FD311-610C-713A-A646-C24BD2591E41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{F961C234-DD44-4781-BCEE-50240F3A50EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F961C234-DD44-4781-BCEE-50240F3A50EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F961C234-DD44-4781-BCEE-50240F3A50EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA0FD311-610C-713A-A646-C24BD2591E41}.Debug|Any CPU.ActiveCfg = Debug
+		{BA0FD311-610C-713A-A646-C24BD2591E41}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

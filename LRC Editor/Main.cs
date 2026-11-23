@@ -24,7 +24,7 @@ namespace LRC_Editor
         private bool isDragging = false;
         private UndoManager _undoManager;
         private bool isPaused = false;
-        private float volume = 1.0f;
+        
         
         private string _filenameMusic;
         
@@ -225,6 +225,7 @@ namespace LRC_Editor
                 labelTime.Text = "00:00 / " +
                     _player.TotalTime.ToString(@"mm\:ss");
 
+                buttonPlay.Text = "Pause F8";
                 playbackTimer.Start();
                 buttonPlay.BackColor = Color.LightGreen;
 
@@ -253,6 +254,7 @@ namespace LRC_Editor
             buttonPlay.UseVisualStyleBackColor = true;
             isPaused = false;
             _player.Rewind(TimeSpan.FromSeconds(0));
+            buttonPlay.Text = "Play/Pause F8";
 
         }
 
@@ -296,7 +298,7 @@ namespace LRC_Editor
         #region FORM KEYDOWN
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F2)
+            if (e.KeyCode == Keys.F5)
             {
                 InsertTimestamp();
                 //e.Handled = true;
@@ -315,11 +317,11 @@ namespace LRC_Editor
 
             if (e.KeyCode == Keys.F6)
             {
-                PlayBackward();
+                PlayBackward();                
             }
             if (e.KeyCode == Keys.F7)
             {
-                PlayForward();
+                PlayForward();                
             }
 
 
@@ -334,6 +336,8 @@ namespace LRC_Editor
             }
 
         }
+
+
 
         private void InsertTimestamp()
         {
@@ -535,6 +539,18 @@ namespace LRC_Editor
             _player.Volume = volumeTrackbar.Value / 100f;
         }
 
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            // Get the selected position in seconds
+            int seconds = trackBar1.Value;
 
+            // Move music to the selected position
+            _player.CurrentTime = TimeSpan.FromSeconds(seconds);
+
+            // Update time label
+            labelTime.Text = _player.CurrentTime.ToString(@"mm\:ss") +
+                             " / " +
+                             _player.TotalTime.ToString(@"mm\:ss");
+        }
     }
 }

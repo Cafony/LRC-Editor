@@ -61,7 +61,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.buttonUndo = new System.Windows.Forms.Button();
             this.buttonRedo = new System.Windows.Forms.Button();
-            this.checkBoxSpeed = new System.Windows.Forms.CheckBox();
             this.labelFilename = new System.Windows.Forms.Label();
             this.buttonCopyText = new System.Windows.Forms.Button();
             this.buttonPasteText = new System.Windows.Forms.Button();
@@ -191,7 +190,7 @@
             // 
             this.f2SyncInsertTimeToolStripMenuItem.Name = "f2SyncInsertTimeToolStripMenuItem";
             this.f2SyncInsertTimeToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.f2SyncInsertTimeToolStripMenuItem.Text = "F2 - Sync Insert Time";
+            this.f2SyncInsertTimeToolStripMenuItem.Text = "F5 - Sync Insert Time";
             // 
             // f6RewindToolStripMenuItem
             // 
@@ -221,7 +220,7 @@
             // 
             this.f8PauseMusicToolStripMenuItem.Name = "f8PauseMusicToolStripMenuItem";
             this.f8PauseMusicToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.f8PauseMusicToolStripMenuItem.Text = "F8 - Pause Music";
+            this.f8PauseMusicToolStripMenuItem.Text = "F8 - Play/Pause";
             this.f8PauseMusicToolStripMenuItem.Click += new System.EventHandler(this.f8PauseMusicToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
@@ -235,12 +234,12 @@
             // 
             this.buttonPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonPlay.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonPlay.Location = new System.Drawing.Point(283, 637);
+            this.buttonPlay.Location = new System.Drawing.Point(238, 637);
             this.buttonPlay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(81, 35);
+            this.buttonPlay.Size = new System.Drawing.Size(126, 35);
             this.buttonPlay.TabIndex = 2;
-            this.buttonPlay.Text = "Play F8";
+            this.buttonPlay.Text = "Play/Pause F8";
             this.buttonPlay.UseVisualStyleBackColor = false;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
@@ -254,6 +253,7 @@
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(948, 45);
             this.trackBar1.TabIndex = 3;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
             this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseUp);
             // 
@@ -324,39 +324,26 @@
             // buttonUndo
             // 
             this.buttonUndo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonUndo.Location = new System.Drawing.Point(830, 42);
+            this.buttonUndo.Location = new System.Drawing.Point(782, 42);
             this.buttonUndo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonUndo.Name = "buttonUndo";
-            this.buttonUndo.Size = new System.Drawing.Size(62, 35);
+            this.buttonUndo.Size = new System.Drawing.Size(85, 35);
             this.buttonUndo.TabIndex = 9;
-            this.buttonUndo.Text = "Undo";
+            this.buttonUndo.Text = "Undo F3";
             this.buttonUndo.UseVisualStyleBackColor = true;
             this.buttonUndo.Click += new System.EventHandler(this.buttonUndo_Click);
             // 
             // buttonRedo
             // 
             this.buttonRedo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRedo.Location = new System.Drawing.Point(901, 42);
+            this.buttonRedo.Location = new System.Drawing.Point(880, 42);
             this.buttonRedo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonRedo.Name = "buttonRedo";
-            this.buttonRedo.Size = new System.Drawing.Size(62, 35);
+            this.buttonRedo.Size = new System.Drawing.Size(85, 35);
             this.buttonRedo.TabIndex = 10;
-            this.buttonRedo.Text = "Redo";
+            this.buttonRedo.Text = "Redo F4";
             this.buttonRedo.UseVisualStyleBackColor = true;
             this.buttonRedo.Click += new System.EventHandler(this.buttonRedo_Click);
-            // 
-            // checkBoxSpeed
-            // 
-            this.checkBoxSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBoxSpeed.AutoSize = true;
-            this.checkBoxSpeed.Location = new System.Drawing.Point(22, 645);
-            this.checkBoxSpeed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.checkBoxSpeed.Name = "checkBoxSpeed";
-            this.checkBoxSpeed.Size = new System.Drawing.Size(95, 24);
-            this.checkBoxSpeed.TabIndex = 11;
-            this.checkBoxSpeed.Text = "Speed 2x";
-            this.checkBoxSpeed.UseVisualStyleBackColor = true;
-            this.checkBoxSpeed.CheckedChanged += new System.EventHandler(this.checkBoxSpeed_CheckedChanged);
             // 
             // labelFilename
             // 
@@ -436,7 +423,7 @@
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(81, 35);
             this.buttonSync.TabIndex = 18;
-            this.buttonSync.Text = "Sync F2";
+            this.buttonSync.Text = "Sync F5";
             this.buttonSync.UseVisualStyleBackColor = false;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
@@ -453,7 +440,6 @@
             this.Controls.Add(this.buttonPasteText);
             this.Controls.Add(this.buttonCopyText);
             this.Controls.Add(this.labelFilename);
-            this.Controls.Add(this.checkBoxSpeed);
             this.Controls.Add(this.buttonRedo);
             this.Controls.Add(this.buttonUndo);
             this.Controls.Add(this.buttonForward);
@@ -472,7 +458,7 @@
             this.MinimumSize = new System.Drawing.Size(1000, 730);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Lyrics Subtitle Maker";
+            this.Text = "Lyrics Karaoke Maker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.menuStrip1.ResumeLayout(false);
@@ -517,7 +503,6 @@
         private System.Windows.Forms.ToolStripMenuItem formatSpacesToOneToolStripMenuItem;
         private System.Windows.Forms.Button buttonUndo;
         private System.Windows.Forms.Button buttonRedo;
-        private System.Windows.Forms.CheckBox checkBoxSpeed;
         private System.Windows.Forms.Label labelFilename;
         private System.Windows.Forms.Button buttonCopyText;
         private System.Windows.Forms.Button buttonPasteText;
